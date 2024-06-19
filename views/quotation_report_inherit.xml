@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_saleorder_document_inherit" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@class='page']" position="inside">
+            <div class="row mb-3">
+                <div class="col-12 text-start">
+                    <h2>Bill of mattirials</h2>
+                </div>
+            </div>
+            <table class="table table-condensed">
+                <thead>
+                    <tr style="background-color: #f0f0f0;">
+                        <th>Product</th>
+                        <th>BOM Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="doc.order_line" t-as="line">
+                        <td>
+                            <span t-field="line.product_id.display_name" />
+                        </td>
+                        <td>
+                            <t t-if="line.related_bom_ids">
+                                <t t-foreach="line.related_bom_ids" t-as="bom">
+                                    <div>
+                                        <strong>BOM:</strong>
+                                        <t t-esc="bom.display_name or 'No BOM Name'" />
+                                    </div>
+                                    <t t-foreach="bom.bom_line_ids" t-as="component">
+                                        <div>
+                                            <strong>Component:</strong>
+                                            <t
+                                                t-esc="component.product_id.display_name or 'No Component'" />
+                                            <br />
+                                            <span>Quantity: <t t-esc="component.product_qty" /></span>
+                                            <br />
+                                            <span>note***: <t t-esc="component.product_id.name" /></span>
+                                        </div>
+                                    </t>
+                                </t>
+                            </t>
+                            <t t-else="">
+                                <div>No BOM</div>
+                            </t>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+</odoo>
